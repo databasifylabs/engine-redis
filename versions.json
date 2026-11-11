@@ -1,0 +1,59 @@
+{
+  "registry": "ghcr.io/databasifylabs",
+  "sdk": "0.2.0",
+  "go": {
+    "image": "golang",
+    "tag": "1.27.3-trixie",
+    "digest": "sha256:af1bfc2614ebb1dbd31af514b78740fd678850e76498762b425ecee4c5c6ea80"
+  },
+  "images": {
+    "redis-8": {
+      "engine": "redis",
+      "line": "8",
+      "release": "8.10.3",
+      "base": {
+        "image": "redis",
+        "tag": "8.10.3",
+        "digest": "sha256:1f88291b4c57bdf249f02eb085a8669889b2d2954e91d4de5118a5da6b78dd53"
+      },
+      "packages": {
+        "procps": "2:4.0.4-9",
+        "iproute2": "6.15.0-1",
+        "jq": "1.7.1-6+deb13u4",
+        "curl": "8.14.1-2+deb13u7",
+        "openssl": "3.5.7-1~deb13u3",
+        "ca-certificates": "20250419+deb13u1"
+      },
+      "sources": {
+        "redis-shake": {
+          "version": "4.7.0",
+          "sha256": "c3e9802027d1284ca6f2ae15aee3406ba5ce714f117798c6baabdf8bf7c67275"
+        }
+      }
+    },
+    "redis-7.2": {
+      "engine": "redis",
+      "line": "7.2",
+      "release": "7.2.17",
+      "base": {
+        "image": "redis",
+        "tag": "7.2.17",
+        "digest": "sha256:5b816bb37d9707a70f10ef5002ecf8ee431750d397010fc4314c93dca887962f"
+      },
+      "packages": {
+        "procps": "2:4.0.2-3",
+        "iproute2": "6.1.0-3",
+        "jq": "1.6-2.1+deb12u3",
+        "curl": "7.88.1-10+deb12u15",
+        "openssl": "3.0.22-1~deb12u2",
+        "ca-certificates": "20250419~deb12u2"
+      },
+      "sources": {
+        "redis-shake": {
+          "version": "4.7.0",
+          "sha256": "c3e9802027d1284ca6f2ae15aee3406ba5ce714f117798c6baabdf8bf7c67275"
+        }
+      }
+    }
+  }
+}
