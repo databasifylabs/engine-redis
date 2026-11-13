@@ -4,7 +4,6 @@
 - [Lines](#lines)
 - [Features](#features)
 - [Ports](#ports)
-- [Engine Notes](#engine-notes)
 - [Running Locally](#running-locally)
 - [Adding a Version Line](#adding-a-version-line)
 
@@ -12,9 +11,9 @@
 
 The Redis engine for [Databasify](https://github.com/databasifylabs/databasify), built on the [engine SDK](https://github.com/databasifylabs/engine-sdk).
 
-Each image is the official `redis` image plus `databasify`, the engine binary that runs as PID 1 and answers the SDK's typed commands. Images are published as `ghcr.io/databasifylabs/databasify-redis`.
+Each image is the official `redis` image plus its tools and `databasify`, the [engine SDK](https://github.com/databasifylabs/engine-sdk) 1.0 runtime that runs as PID 1. Images are published as `ghcr.io/databasifylabs/databasify-redis`.
 
-The commands and the flows Databasify runs are the same for every engine; see the SDK's [Flows](https://github.com/databasifylabs/engine-sdk#flows).
+Engine behaviour lives in the Databasify app: its PHP driver for this engine runs Bash scripts inside the container through the runtime. This repository changes only when the database or one of its tools moves to a new version.
 
 ## Lines
 
@@ -36,9 +35,7 @@ Redis 7.2 and 8. Redis 7.2 takes patches of its release only, because 7.4 is not
 | Continuous migration | redis-shake |
 | Fork (one-shot copy) | ✓ |
 | Query insights | `SLOWLOG` |
-| Log forwarding and host tuning | ✓ |
-
-A command the engine doesn't offer answers `unsupported`; `engine capabilities` lists the ones it does.
+| Host tuning | ✓ |
 
 ## Ports
 
@@ -47,25 +44,18 @@ A command the engine doesn't offer answers `unsupported`; `engine capabilities` 
 | 25061 | `client`, for applications |
 | 6379, 26379 | `peers`: replication and Sentinel |
 
-## Engine Notes
-
-- The engine code is the `Redis` flavor of [engine-sentinel-family](https://github.com/databasifylabs/engine-sentinel-family). This repository holds only the entry point and the images.
-- Persistence is the `appendonly` setting.
-- To remove a node, every remaining node runs `node reset` with the remaining hosts, instead of `member forget`.
-- `node metrics` also reports `keys`, `hits`, `misses` and `evicted`.
-
 ## Running Locally
 
-`$IMAGES` is `tools/images.sh` in a clone of [engine-sdk](https://github.com/databasifylabs/engine-sdk) at the version `go.mod` requires. Run it from this repository's root:
+`$IMAGES` is `tools/images.sh` in a clone of [engine-sdk](https://github.com/databasifylabs/engine-sdk) at the tag the `sdk` pin in `versions.json` names (`v1.0.0`). Run it from this repository's root:
 
 ```bash
-go vet ./... && go test -race -count=1 ./...
+$IMAGES check
 $IMAGES build redis-8 --load --tag smoke:redis-8
 $IMAGES smoke smoke:redis-8 redis
 ```
 
-The smoke test starts the image, runs `images/redis/smoke/check.sh` and then the SDK's conformance suite.
+The smoke test starts the image, runs `images/redis/smoke/check.sh` and then the SDK's runtime conformance suite.
 
 ## Adding a Version Line
 
-Follow `.claude/skills/adding-a-version-line/SKILL.md`. It covers the `versions.json` entry, the code that differs per line in this engine, and the checks to run.
+Follow `.claude/skills/adding-a-version-line/SKILL.md`. It covers the `versions.json` entry, what differs per line, and the checks to run.
