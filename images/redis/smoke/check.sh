@@ -16,5 +16,5 @@ if [ "${DATABASIFY_LINE%%.*}" -ge 8 ]; then
     echo "rejson, redisearch, redisbloom and redistimeseries loaded"
 fi
 redis-shake --version 2>&1 | sed -n 1p
-echo "redis $DATABASIFY_RELEASE answered through the wrapper"
+echo "redis $DATABASIFY_RELEASE runs under the databasify supervisor"
 [ "$(id -u redis)" = 64999 ] && [ "$(id -g redis)" = 64999 ]
